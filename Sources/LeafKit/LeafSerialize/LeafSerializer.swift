@@ -117,24 +117,13 @@ internal struct LeafSerializer {
         let pathComponents = loop.array.split(separator: ".")
 
         if pathComponents.count > 1 {
-            finalData = try pathComponents[0..<(pathComponents.count - 1)].enumerated()
-                .reduce(data) { (innerData, pathContext) -> [String: LeafData] in
-                    let key = String(pathContext.element)
-
-                    guard let nextData = innerData[key]?.dictionary else {
-                        let currentPath = pathComponents[0...pathContext.offset].joined(separator: ".")
-                        throw "expected dictionary at key: \(currentPath)"
-                    }
-
-                    return nextData
-                }
+            finalData = pathComponents[0..<(pathComponents.count - 1)].enumerated()
+                .reduce(data) { $0[String($1.element)]?.dictionary ?? [:] }
         } else {
             finalData = data
         }
 
-        guard let array = finalData[String(pathComponents.last!)]?.array else {
-            throw "expected array at key: \(loop.array)"
-        }
+        guard let array = finalData[String(pathComponents.last!)]?.array else { return }
 
         for (idx, item) in array.enumerated() {
             var innerContext = data
