@@ -44,7 +44,7 @@ public enum Parameter: Equatable, CustomStringConvertible {
 /// `Keyword`s are identifiers which take precedence over syntax/variable names - may potentially have
 /// representable state themselves as value when used with operators (eg, `true`, `false` when
 /// used with logical operators, `nil` when used with equality operators, and so forth)
-public enum LeafKeyword: String, Equatable {
+public enum LeafKeyword: String, CaseIterable, Equatable {
     // MARK: Public - Cases
     
     //                      Eval -> Bool / Other
